@@ -1,0 +1,50 @@
+{
+    "name": "flarone/laravel-searchable",
+    "description": "A search package for Laravel 8",
+    "keywords": [
+        "flarone",
+        "laravel-searchable",
+        "laravel",
+        "search",
+        "searchable",
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Flarone",
+            "email": "info@flarone.com",
+            "homepage": "https://flarone.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "~8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "~8.3",
+        "orchestra/testbench": "~4.0",
+        "mockery/mockery": "^1.2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flarone\\Searchable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flarone\\Searchable\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\Flarone\\Searchable\\SearchableServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}
