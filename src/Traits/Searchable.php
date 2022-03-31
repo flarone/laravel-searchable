@@ -118,6 +118,7 @@ trait Searchable
                 }
             }
             foreach($modelRecord::SEARCHABLE_RELATIONS as $relation) {
+                if (empty($fetched)) return;
                 print ".";
                 $fetched = $modelRecord->{$relation};
                 if ($fetched instanceof Collection) {
