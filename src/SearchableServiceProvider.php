@@ -17,7 +17,6 @@ class SearchableServiceProvider extends ServiceProvider
     {
         $this->loadPublisers();
         $this->loadRoutes();
-        $this->loadViews();
     }
 
     /**
@@ -27,7 +26,7 @@ class SearchableServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/config/searchable.php', 'searchable');
+        $this->mergeConfigFrom(__DIR__ . '/../config/searchable.php', 'searchable');
         $this->registerCommands();
     }
 
@@ -40,12 +39,12 @@ class SearchableServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/config/searchable.php' => config_path('searchable.php'),
+                __DIR__ . '/../config/searchable.php' => config_path('searchable.php'),
             ], 'config');
 
             if (! class_exists('CreateSearchIndexTable')) {
                 $this->publishes([
-                    __DIR__.'/../database/migrations/create_search_index_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_search_index_table.php'),
+                    __DIR__ . '/../database/migrations/create_search_index_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_search_index_table.php'),
                 ], 'migrations');
             }
         }
@@ -59,33 +58,11 @@ class SearchableServiceProvider extends ServiceProvider
     private function loadRoutes()
     {
         Route::middleware('api')->prefix('api')->group(function () {
-            $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         });
         Route::middleware('web')->prefix(config('searchable.slug'))->group(function () {
-            $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         });
-    }
-
-    /**
-     * Load the package views.
-     *
-     * @return void
-     */
-    private function loadViews()
-    {
-        $viewsPath = $this->packagePath('resources/views');
-        $this->loadViewsFrom($viewsPath, 'searchable');
-    }
-
-    /**
-     * Get the absolute path to some package resource.
-     *
-     * @param string $path The relative path to the resource
-     * @return string
-     */
-    private function packagePath($path)
-    {
-        return __DIR__."/../$path";
     }
 
     /**
