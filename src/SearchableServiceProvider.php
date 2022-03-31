@@ -40,12 +40,12 @@ class SearchableServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/searchable.php' => config_path('searchable.php'),
-            ], 'config');
+            ], 'searchable-config');
 
             if (! class_exists('CreateSearchIndexTable')) {
                 $this->publishes([
                     __DIR__ . '/../database/migrations/create_search_index_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_search_index_table.php'),
-                ], 'migrations');
+                ], 'searchable-migrations');
             }
         }
     }
