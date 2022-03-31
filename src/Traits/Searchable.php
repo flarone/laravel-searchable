@@ -129,7 +129,8 @@ trait Searchable
 //                        'searchcontent' => trim(strip_tags($modelRecord->{$field})),
 //                    ]);
 
-                    if (count($this->importData) > 10000) {
+                    if (count($this->importData) > 5000) {
+                        print ".";
                         $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
                         $this->importData = [];
                     }
