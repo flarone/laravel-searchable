@@ -2,6 +2,7 @@
 
 namespace Flarone\Searchable\Traits;
 
+use Flarone\Searchable\Classes\ImportGenerator;
 use Flarone\Searchable\Models\Search;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,10 @@ trait Searchable
     private $buffer = 10;
 
     protected $current_index;
+
+    protected $importExclude = ['model', 'model_id', 'field', 'parent_model', 'parent_id'];
+    protected $importData = [];
+    protected $importGenerator;
 
     protected function usesSoftDeletes(): bool
     {
@@ -38,6 +43,7 @@ trait Searchable
 
     protected function generateSearchIndex()
     {
+        $this->importGenerator = new ImportGenerator;
         $this->current_index = Search::pluck('id')->all();
 
         // exclude models from the searches here
@@ -103,20 +109,36 @@ trait Searchable
             $parent_id = $parent_id ?? $modelRecord->id;
             foreach($fields as $field) {
                 if (!empty($modelRecord->{$field})) {
-                    $result = Search::updateOrCreate([
+
+                    $this->importData[] = [
                         'model' => $classname,
                         'model_id' => $modelRecord->id,
                         'field' => $field,
                         'parent_model' => $parent_model,
-                        'parent_id' => $parent_id
-                    ], [
+                        'parent_id' => $parent_id,
                         'searchcontent' => trim(strip_tags($modelRecord->{$field})),
-                    ]);
-                    if (($key = array_search($result->id, $this->current_index)) !== false) {
-                        unset($this->current_index[$key]);
+                    ];
+
+//                    $result = Search::updateOrCreate([
+//                        'model' => $classname,
+//                        'model_id' => $modelRecord->id,
+//                        'field' => $field,
+//                        'parent_model' => $parent_model,
+//                        'parent_id' => $parent_id
+//                    ], [
+//                        'searchcontent' => trim(strip_tags($modelRecord->{$field})),
+//                    ]);
+
+                    if (count($this->importData) > 10000) {
+                        $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
                     }
+//                    if (($key = array_search($result->id, $this->current_index)) !== false) {
+//                        unset($this->current_index[$key]);
+//                    }
                 }
             }
+            if (count($this->importData) > 0) $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+
             foreach($modelRecord::SEARCHABLE_RELATIONS as $relation) {
                 if (empty($fetched)) return;
                 print ".";

@@ -37,4 +37,9 @@ class Search extends Model
     protected $casts = [
         'id' => 'string',
     ];
+
+    public function find($query = null) {
+        if(is_null($query)) return collect();
+        return self::where('searchcontent', 'like', "%$query%" )->get();
+    }
 }
