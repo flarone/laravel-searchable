@@ -131,13 +131,17 @@ trait Searchable
 
                     if (count($this->importData) > 10000) {
                         $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+                        $this->importData = [];
                     }
 //                    if (($key = array_search($result->id, $this->current_index)) !== false) {
 //                        unset($this->current_index[$key]);
 //                    }
                 }
             }
-            if (count($this->importData) > 0) $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+            if (count($this->importData) > 0) {
+                $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+                $this->importData = [];
+            }
 
             foreach($modelRecord::SEARCHABLE_RELATIONS as $relation) {
                 if (empty($fetched)) return;
