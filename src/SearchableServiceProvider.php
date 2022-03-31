@@ -2,6 +2,7 @@
 
 namespace Flarone\Searchable;
 
+use Flarone\Searchable\Console\Commands\GenerateSearchIndex;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -89,7 +90,7 @@ class SearchableServiceProvider extends ServiceProvider
     private function registerCommands()
     {
         $this->commands([
-
+            GenerateSearchIndex::class
         ]);
     }
 }

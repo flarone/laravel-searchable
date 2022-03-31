@@ -5,4 +5,4 @@ if(!App()->isProduction()) {
     Route::get('test', function () {
         return response()->json(['Result' => 'OK']);
     });
-} 
+}
