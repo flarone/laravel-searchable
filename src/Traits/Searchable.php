@@ -43,7 +43,7 @@ trait Searchable
 
     protected function generateSearchIndex()
     {
-        $this->importGenerator = new ImportGenerator;
+//        $this->importGenerator = new ImportGenerator;
         $this->current_index = Search::pluck('id')->all();
 
         // exclude models from the searches here
@@ -110,39 +110,39 @@ trait Searchable
             foreach($fields as $field) {
                 if (!empty($modelRecord->{$field})) {
 
-                    $this->importData[] = [
-                        'model' => $classname,
-                        'model_id' => $modelRecord->id,
-                        'field' => $field,
-                        'parent_model' => $parent_model,
-                        'parent_id' => $parent_id,
-                        'searchcontent' => trim(strip_tags($modelRecord->{$field})),
-                    ];
-
-//                    $result = Search::updateOrCreate([
+//                    $this->importData[] = [
 //                        'model' => $classname,
 //                        'model_id' => $modelRecord->id,
 //                        'field' => $field,
 //                        'parent_model' => $parent_model,
-//                        'parent_id' => $parent_id
-//                    ], [
+//                        'parent_id' => $parent_id,
 //                        'searchcontent' => trim(strip_tags($modelRecord->{$field})),
-//                    ]);
+//                    ];
 
-                    if (count($this->importData) > 100) {
-                        print ".";
-                        $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
-                        $this->importData = [];
-                    }
+                    $result = Search::updateOrCreate([
+                        'model' => $classname,
+                        'model_id' => $modelRecord->id,
+                        'field' => $field,
+                        'parent_model' => $parent_model,
+                        'parent_id' => $parent_id
+                    ], [
+                        'searchcontent' => trim(strip_tags($modelRecord->{$field})),
+                    ]);
+
+//                    if (count($this->importData) > 100) {
+//                        print ".";
+//                        $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+//                        $this->importData = [];
+//                    }
 //                    if (($key = array_search($result->id, $this->current_index)) !== false) {
 //                        unset($this->current_index[$key]);
 //                    }
                 }
             }
-            if (count($this->importData) > 0) {
-                $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
-                $this->importData = [];
-            }
+//            if (count($this->importData) > 0) {
+//                $this->importGenerator->generate('search_index', $this->importData, $this->importExclude);
+//                $this->importData = [];
+//            }
 
             foreach($modelRecord::SEARCHABLE_RELATIONS as $relation) {
                 if (empty($fetched)) return;
