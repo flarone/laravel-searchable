@@ -19,6 +19,22 @@ trait Searchable
     protected $importData = [];
     protected $importGenerator;
 
+    public static function boot() {
+        parent::boot();
+
+        static::created(function($model) {
+            self::getSearchData($model, class_basename($model));
+        });
+
+        static::updated(function($model) {
+            self::getSearchData($model, class_basename($model));
+        });
+
+        static::deleting(function($model) {
+            Search::where([['model', class_basename($model)],['model_id', $model->id]])->delete();
+        });
+    }
+
     protected function usesSoftDeletes(): bool
     {
         return (bool) in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($this));
@@ -159,6 +175,12 @@ trait Searchable
                 }
             }
         }
+    }
+
+    protected function updateRecord() {
+        $model::get()->map(function ($modelRecord) use ($classname) {
+            self::getSearchData($modelRecord, $classname);
+        });
     }
 
     /** A helper function to generate the model namespace
