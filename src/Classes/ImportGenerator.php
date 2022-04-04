@@ -2,6 +2,8 @@
 
 namespace Flarone\Searchable\Classes;
 
+use Illuminate\Support\Facades\Log;
+
 class ImportGenerator
 {
     /**
@@ -23,6 +25,9 @@ class ImportGenerator
         $query = vsprintf('insert into `%s` (`%s`) values %s on duplicate key update %s', [
             $table, $columnsString, $values, $updates,
         ]);
+
+        Log::info('Query:');
+        Log::info($query);
 
         return new ImportObject($query, $this->extractBindingsFrom($rows));
     }
