@@ -23,15 +23,15 @@ trait Searchable
         parent::boot();
 
         static::created(function($model) {
-            self::getSearchData($model, class_basename($model));
+            $model->getSearchData($model, class_basename($model));
         });
 
         static::updated(function($model) {
-            self::getSearchData($model, class_basename($model));
+            $model->getSearchData($model, class_basename($model));
         });
 
         static::deleting(function($model) {
-            Search::where([['model', class_basename($model)],['model_id', $model->id]])->delete();
+            Search::where([['model', class_basename($model)],['model_id', $model->id]])->forceDelete();
         });
     }
 
