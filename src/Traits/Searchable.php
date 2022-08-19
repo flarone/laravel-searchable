@@ -13,7 +13,7 @@ trait Searchable
 {
     private $buffer = 10;
 
-    protected $current_index;
+    protected $current_index = null;
 
     protected $importExclude = ['model', 'model_id', 'field', 'parent_model', 'parent_id'];
     protected $importData = [];
@@ -136,8 +136,10 @@ trait Searchable
                         'searchcontent' => trim(strip_tags($modelRecord->{$field})),
                     ]);
 
-                    if (($key = array_search($result->id, $this->current_index)) !== false) {
-                        unset($this->current_index[$key]);
+                    if(!is_null($this->current_index)) {
+                        if (($key = array_search($result->id, $this->current_index)) !== false) {
+                            unset($this->current_index[$key]);
+                        }
                     }
                 }
             }
