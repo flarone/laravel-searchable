@@ -19,6 +19,9 @@ Flarone is a web development studio based near Amsterdam, The Netherlands. You c
  Laravel  | Laravel-searchable
 :---------|:----------
  8.x  	  | 1.0.x
+ 9.x  	  | 1.0.x
+ 10.x  	  | 1.0.x
+
 ## Features overview
 
  - Searchable models will be indexed automatically
@@ -57,4 +60,8 @@ Cache flush command:
 
     php artisan searchable:flush
 
+
+#### Credits
+
+- Flarone - https://flarone.com
 
