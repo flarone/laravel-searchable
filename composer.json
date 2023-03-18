@@ -1,6 +1,6 @@
 {
     "name": "flarone/laravel-searchable",
-    "description": "A search package for Laravel 8",
+    "description": "A search package for Laravel",
     "keywords": [
         "flarone",
         "laravel-searchable",
